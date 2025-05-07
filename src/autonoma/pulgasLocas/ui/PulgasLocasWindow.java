@@ -1,21 +1,49 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
- */
+
 package autonoma.pulgasLocas.ui;
+
+import autonoma.pulgasLocas.elements.CampoBatalla;
+import autonoma.pulgasLocasBase.elements.GraphicContainer;
+import java.awt.Graphics;
+import java.awt.Rectangle;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import static javax.swing.WindowConstants.EXIT_ON_CLOSE;
 
 /**
  *
- * @author jgiugtiñut
+ * @author Alejandra Ortega
  */
-public class PulgasLocasWindow extends javax.swing.JFrame {
+public class PulgasLocasWindow extends javax.swing.JFrame 
+                               implements GraphicContainer {
 
+   protected CampoBatalla campoBatalla;
     /**
      * Creates new form PulgasLocasWindow
      */
-    public PulgasLocasWindow() {
-        initComponents();
+ 
+        public PulgasLocasWindow() {
+        super("Pulgas Locas");
+
+        setSize(800, 600);
+        setDefaultCloseOperation(EXIT_ON_CLOSE);
+        setLocationRelativeTo(null); // Centra la ventana
+        setResizable(false);
+            addMouseListener(new MouseAdapter(){
+                @Override
+                public void mouseClicked(MouseEvent e){
+                    mousePresionado(e);
+                }
+            });
+        addKeyListener(new KeyAdapter() {
+            @Override
+            public void keyPressed(KeyEvent evt) {
+                formKeyPressed(evt);
+            }
+        });
     }
+    
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -27,6 +55,11 @@ public class PulgasLocasWindow extends javax.swing.JFrame {
     private void initComponents() {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                formKeyPressed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -42,7 +75,47 @@ public class PulgasLocasWindow extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    private void formKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_formKeyPressed
+        if (evt.getKeyCode() == KeyEvent.VK_Q) {
+            System.exit(0);
+        }
+
+        if (campoBatalla != null &&
+            (evt.getKeyCode() == KeyEvent.VK_SPACE ||
+             evt.getKeyCode() == KeyEvent.VK_M ||
+             evt.getKeyCode() == KeyEvent.VK_S || 
+                evt.getKeyCode() == KeyEvent.VK_P ||
+                evt.getKeyCode() == KeyEvent.VK_R)) {
+
+            campoBatalla.keyPressed(evt.getKeyCode());
+        }         // TODO add your handling code here:
+    }//GEN-LAST:event_formKeyPressed
+    private void mousePresionado(MouseEvent e){
+        this.campoBatalla.disparoPistola(e.getX(), e.getY());
+    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     // End of variables declaration//GEN-END:variables
+public void setCampoBatalla(CampoBatalla campoBatalla) {
+        this.campoBatalla = campoBatalla;
+    }
+
+    @Override
+    public void paint(Graphics g) {
+        super.paint(g);
+        if (campoBatalla != null) {
+            campoBatalla.paint(g);
+        }
+    }
+
+    @Override
+    public void refresh() {
+        repaint();
+    }
+
+    @Override
+    public Rectangle getBoundaries() {
+        return getBounds();
+    }
 }
+
