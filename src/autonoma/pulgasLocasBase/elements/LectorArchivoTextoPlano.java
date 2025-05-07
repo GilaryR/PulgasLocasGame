@@ -1,11 +1,5 @@
-
 package autonoma.pulgasLocasBase.elements;
 
-/**
- *
- * @author 
- */
-import autonoma.pulgasLocasBase.elements.Lector;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -13,14 +7,16 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Clase que implementa la interfaz {@link Lector} para leer datos desde archivos de texto plano.
- * Esta clase permite leer archivos línea por línea.
+ * Implementación de la interfaz {@link Lector} para leer datos desde archivos de texto plano.
  * 
- * @author Usuario
- * @version 1.0
+ * <p>Lee archivos línea por línea y puede calcular el puntaje más alto en archivos con formato CSV.</p>
+ * 
+ * @author Luisa Fernanda Henao Posada
+ * @since 2025-05-05
+ * @version 1.0.0
  */
 public class LectorArchivoTextoPlano implements Lector {
-    
+
     /**
      * Lee todas las líneas de un archivo de texto plano.
      * 
@@ -33,13 +29,13 @@ public class LectorArchivoTextoPlano implements Lector {
         List<String> lineas = Files.readAllLines(Paths.get(ruta));
         return new ArrayList<>(lineas);
     }
-    
+
     /**
-     * Lee el puntaje más alto almacenado en un archivo.
+     * Lee el puntaje más alto almacenado en un archivo CSV con estructura "nombre,puntaje".
      * 
-     * @param ruta Ruta del archivo que contiene el puntaje.
-     * @return El puntaje más alto como un entero.
-     * @throws IOException Si ocurre un error al acceder o leer el archivo.
+     * @param ruta Ruta del archivo que contiene los datos.
+     * @return El puntaje más alto encontrado en el archivo. Retorna 0 si hay errores o está vacío.
+     * @throws IOException Si ocurre un error de lectura del archivo.
      */
     public int leerPuntajeAlto(String ruta) throws IOException {
         try {
@@ -47,11 +43,12 @@ public class LectorArchivoTextoPlano implements Lector {
             if (lineas.isEmpty()) {
                 return 0;
             }
+
             int max = 0;
-            for(int i = 1; i < lineas.size(); i++){
+            for (int i = 1; i < lineas.size(); i++) {
                 String[] text = lineas.get(i).split(",");
                 int puntuacion = Integer.parseInt(text[1]);
-                if(max < puntuacion){
+                if (max < puntuacion) {
                     max = puntuacion;
                 }
             }
