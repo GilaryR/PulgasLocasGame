@@ -50,7 +50,7 @@ public class CampoBatalla extends SpriteContainer {
         random = new Random();
         lector = new LectorArchivoTextoPlano();
         this.game = game;
-        escritor = new EscritorTextoPlano("maxpuntaje.csv");
+        escritor = new EscritorTextoPlano("src/autonoma/pulgasLocas/util/puntajes.txt");
         this.cargarMaximoPuntaje();
     }
 
@@ -59,7 +59,7 @@ public class CampoBatalla extends SpriteContainer {
      */
     private void cargarMaximoPuntaje() {
         try {
-            maxPuntaje = lector.leerPuntajeAlto("maxpuntaje.csv");
+            maxPuntaje = lector.leerPuntajeAlto("src/autonoma/pulgasLocas/util/puntajes.txt");
         } catch (Exception e) {
             System.out.println("Error al cargar el máximo puntaje: " + e.getMessage());
             maxPuntaje = 0;

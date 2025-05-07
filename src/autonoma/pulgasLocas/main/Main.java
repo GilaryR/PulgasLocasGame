@@ -4,9 +4,6 @@
  */
 package autonoma.pulgasLocas.main;
 
-import autonoma.pulgasLocas.main.PulgaGame;
-import autonoma.pulgasLocas.main.PulgaGame;
-
 /**
  *
  * @author Alejandra

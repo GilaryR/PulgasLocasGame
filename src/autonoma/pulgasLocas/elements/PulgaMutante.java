@@ -42,7 +42,7 @@ public class PulgaMutante extends Pulga {
 
         try {
             // Intenta cargar la imagen de la pulga mutante desde los recursos del proyecto
-            imagenPulgaMutante = ImageIO.read(getClass().getResourceAsStream("/autonoma/pulgasLocas/images/PulgaMutante.jpg"));
+            imagenPulgaMutante = ImageIO.read(getClass().getResourceAsStream("/autonoma/pulgasLocas/images/PulgaMutante.png"));
         } catch (IOException | NullPointerException e) {
             System.out.println("Imagen de pulga mutante no encontrada. Usando color predeterminado.");
             this.color = java.awt.Color.RED;
