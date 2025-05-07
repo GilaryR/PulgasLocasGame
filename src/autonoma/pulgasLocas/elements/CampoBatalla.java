@@ -6,17 +6,25 @@ import autonoma.pulgasLocasBase.elements.EscritorTextoPlano;
 import autonoma.pulgasLocasBase.elements.LectorArchivoTextoPlano;
 import autonoma.pulgasLocasBase.elements.Sprite;
 import autonoma.pulgasLocasBase.elements.SpriteContainer;
+import java.awt.Color;
+import java.awt.Font;
 
 
 import java.awt.Graphics;
 import java.awt.Rectangle;
 import java.awt.event.KeyEvent;
+import java.io.File;
 import java.io.IOException;
 import java.util.Random;
 import javax.swing.JFrame;
 import java.util.Collections;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.sound.sampled.AudioInputStream;
+import javax.sound.sampled.AudioSystem;
+import javax.sound.sampled.Clip;
+import javax.sound.sampled.LineUnavailableException;
+import javax.sound.sampled.UnsupportedAudioFileException;
 import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 
@@ -126,12 +134,14 @@ public class CampoBatalla extends SpriteContainer {
     /**
      * Hace que todas las pulgas salten.
      */
-    public void pulgasSaltan() {
-        for (Object obj : sprites) {
-            Pulga pulga = (Pulga) obj;
-            pulga.saltar(this.getBoundaries());
-        }
+   public void pulgasSaltan() {
+    for (Object obj : sprites) {
+        Pulga pulga = (Pulga) obj;
+        pulga.saltar(this.getBoundaries());
     }
+    reproducirSonido("src/autonoma/pulgasLocas/sounds/Saltos.wav");
+}
+
 
     /**
      * Procesa un disparo con pistola, eliminando una pulga si es impactada.
@@ -140,44 +150,47 @@ public class CampoBatalla extends SpriteContainer {
      * @param x Coordenada X del disparo.
      * @param y Coordenada Y del disparo.
      */
-    public void disparoPistola(int x, int y) {
-        for (int i = 0; i < sprites.size(); i++) {
-            Pulga pulga = (Pulga) sprites.get(i);
-            if (x >= pulga.getX() && x <= pulga.getX() + pulga.getWidth()
-                    && y >= pulga.getY() && y <= pulga.getY() + pulga.getHeight()) {
+public void disparoPistola(int x, int y) {
+    for (int i = 0; i < sprites.size(); i++) {
+        Pulga pulga = (Pulga) sprites.get(i);
+        if (x >= pulga.getX() && x <= pulga.getX() + pulga.getWidth()
+                && y >= pulga.getY() && y <= pulga.getY() + pulga.getHeight()) {
 
-                if (pulga instanceof PulgaMutante && !pulga.recibirImpacto()) {
-                    PulgaNormal pulgaNormal = ((PulgaMutante) pulga).convertirANormal();
-                    sprites.set(i, pulgaNormal);
-                } else {
-                    sprites.remove(i);
-                    puntaje++;
-                }
-                break;
-            }
-        }
-
-        if (this.sprites.size() == 0) {
-            this.game.getSpawner().stop();
-            String[] options = {"REINICIAR", "SALIR"};
-            int choice = JOptionPane.showOptionDialog(
-                    null,
-                    "¿Quieres continuar?",
-                    "Confirmación",
-                    JOptionPane.YES_NO_OPTION,
-                    JOptionPane.QUESTION_MESSAGE,
-                    null,
-                    options,
-                    options[0]
-            );
-            boolean continuar = (choice == JOptionPane.YES_OPTION);
-            if (continuar) {
-                this.reiniciarJuego();
+            if (pulga instanceof PulgaMutante && !pulga.recibirImpacto()) {
+                PulgaNormal pulgaNormal = ((PulgaMutante) pulga).convertirANormal();
+                sprites.set(i, pulgaNormal);
+                reproducirSonido("src/autonoma/pulgasLocas/sounds/Convertir.wav");
             } else {
-                handleExitGame();
+                sprites.remove(i);
+                puntaje++;
+                reproducirSonido("src/autonoma/pulgasLocas/sounds/disparoPistola.wav");
             }
+            break;
         }
     }
+
+    if (this.sprites.size() == 0) {
+        this.game.getSpawner().stop();
+        String[] options = {"REINICIAR", "SALIR"};
+        int choice = JOptionPane.showOptionDialog(
+                null,
+                "¿Quieres continuar?",
+                "Confirmación",
+                JOptionPane.YES_NO_OPTION,
+                JOptionPane.QUESTION_MESSAGE,
+                null,
+                options,
+                options[0]
+        );
+        boolean continuar = (choice == JOptionPane.YES_OPTION);
+        if (continuar) {
+            this.reiniciarJuego();
+        } else {
+            handleExitGame();
+        }
+    }
+    reproducirSonido("src/autonoma/pulgasLocas/sounds/Victoria.wav");
+}
 
     /**
      * Solicita al usuario su nombre y guarda el puntaje antes de salir.
@@ -209,6 +222,7 @@ public class CampoBatalla extends SpriteContainer {
             sprites.remove(0);
             puntaje++;
         }
+         reproducirSonido("src/autonoma/pulgasLocas/sounds/Misil.wav");
     }
 
     /**
@@ -218,7 +232,7 @@ public class CampoBatalla extends SpriteContainer {
      */
     public boolean todasPulgasEliminadas() {
         return sprites.isEmpty();
-    }
+} 
 
     /**
      * Reinicia el juego, guardando el puntaje y restableciendo el estado inicial.
@@ -294,19 +308,25 @@ public class CampoBatalla extends SpriteContainer {
      * @param g contexto gráfico.
      */
     @Override
-    public void paint(Graphics g) {
-        g.setColor(java.awt.Color.LIGHT_GRAY);
-        g.fillRect(x, y, width, height);
+public void paint(Graphics g) {
+    g.setColor(new Color(177, 224, 226));
+    g.fillRect(x, y, width, height);
 
-        for (Object sprite : sprites) {
-            ((Sprite) sprite).paint(g);
-        }
-
-        g.setColor(java.awt.Color.BLACK);
-        g.drawString("Puntaje: " + puntaje, 20, 40);
-        g.drawString("Pulgas restantes: " + getCantidadPulgas(), 20, 60);
-        g.drawString("Máximo puntaje: " + maxPuntaje, 20, 80);
+    for (Object sprite : sprites) {
+        ((Sprite) sprite).paint(g);
     }
+    Font fuente = new Font("Arial", Font.BOLD, 18);
+    g.setFont(fuente);
+    
+    g.setColor(new Color(0, 153, 0)); 
+    g.drawString("Puntaje: " + puntaje, 20, 90);
+
+    g.setColor(new Color(0, 102, 204)); 
+    g.drawString("Pulgas restantes: " + getCantidadPulgas(), 20, 70);
+
+    g.setColor(new Color(204, 0, 0)); 
+    g.drawString("Máximo puntaje: " + maxPuntaje, 20, 50);
+}
 
     /**
      * Método de refresco del contenedor (actualmente vacío).
@@ -323,4 +343,16 @@ public class CampoBatalla extends SpriteContainer {
     public Rectangle getBoundaries() {
         return new Rectangle(x, y, width, height);
     }
+
+    private void reproducirSonido(String ruta) {
+    try {
+        File archivoSonido = new File(ruta);
+        AudioInputStream audioIn = AudioSystem.getAudioInputStream(archivoSonido);
+        Clip clip = AudioSystem.getClip();
+        clip.open(audioIn);
+        clip.start();
+    } catch (IOException | LineUnavailableException | UnsupportedAudioFileException e) {
+        System.out.println("Error al reproducir sonido: " + e.getMessage());
+    }
+}
 }
