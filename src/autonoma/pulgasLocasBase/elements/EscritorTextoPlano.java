@@ -10,7 +10,7 @@ import java.nio.charset.Charset;
 
 /**
  *
- * @author juanp
+ * @author 
  */
 public class EscritorTextoPlano implements Escritor {
 

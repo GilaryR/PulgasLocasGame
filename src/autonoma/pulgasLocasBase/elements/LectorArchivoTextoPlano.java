@@ -3,7 +3,7 @@ package autonoma.pulgasLocasBase.elements;
 
 /**
  *
- * @author jgiugtiñut
+ * @author 
  */
 import autonoma.pulgasLocasBase.elements.Lector;
 import java.io.IOException;

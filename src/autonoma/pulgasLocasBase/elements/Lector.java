@@ -3,7 +3,7 @@ package autonoma.pulgasLocasBase.elements;
 
 /**
  *
- * @author jgiugtiñut
+ * @author 
  */
 import java.io.IOException;
 import java.util.ArrayList;
