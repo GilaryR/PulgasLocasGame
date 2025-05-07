@@ -1,8 +1,11 @@
+package autonoma.pulgasLocas.elements;
+
 import autonoma.pulgasLocasBase.elements.Sprite;
 import java.awt.Graphics;
 import java.awt.Rectangle;
 import java.util.Random;
 import javax.swing.ImageIcon;
+
 
 /**
  * Clase abstracta que representa a una pulga dentro del juego.
