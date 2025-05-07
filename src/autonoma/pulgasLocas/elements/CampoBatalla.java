@@ -189,7 +189,6 @@ public void disparoPistola(int x, int y) {
             handleExitGame();
         }
     }
-    reproducirSonido("src/autonoma/pulgasLocas/sounds/Victoria.wav");
 }
 
     /**
