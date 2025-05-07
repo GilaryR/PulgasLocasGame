@@ -1,6 +1,5 @@
 
 package autonoma.pulgasLocasBase.elements;
-
 import autonoma.pulgasLocasBase.elements.Sprite;
 
 /**
